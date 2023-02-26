@@ -1,5 +1,24 @@
 (function () {
 
+    function DisplayNavBar() {
+        // AJAX
+        // instantiate the XHR Object
+        let XHR = new XMLHttpRequest()
+
+        // add event listener for readystatechange
+        XHR.addEventListener("readystatechange", () => {
+            if (XHR.readyState === 4 && XHR.status === 200) {
+                $('#navigationBar').html(XHR.responseText)
+            }
+        })
+
+        // connect and get data
+        XHR.open("GET", "./static/header.html")
+
+        // send request to server to await response
+        XHR.send()
+    }
+
     function DisplayHome() {
         $("#RandomButton").on("click", function() {
             location.href = 'contact.html'
@@ -25,8 +44,40 @@
         }
     }
 
+    function ValidateInput(inputFieldID, regularExpression, exception) {
+        let messageArea = $('#messageArea').hide()
+
+        $('#' + inputFieldID).on("blur", function() {
+            let inputText = $(this).val()
+
+            if (!regularExpression.test(inputText)) {
+                // failure to match full name with regex
+
+                $(this).trigger("focus").trigger("select")
+
+                messageArea.addClass("alert alert-danger").text(exception).show()
+            } else {
+                // success in matching full name with regex
+
+                messageArea.removeAttr("class").hide()
+            }
+        })
+    }
+
+    function ContactFormValidate() {
+        let emailAddressPattern = /^[\w-\.]+@([\w-]+\.)+[\w-][\D]{2,10}$/g
+        let phoneNumberPattern = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/g
+        let fullNamePattern = /^([A-Z][a-z]{1,25})((\s|,|-)([A-Z][a-z]{1,25}))*(\s|-|,)*([A-Z][a-z]{1,25})*$/g
+
+        ValidateInput("fullName", fullNamePattern, "Please enter a valid Full name which means a capitalized first name and capitalized last name")
+        ValidateInput("emailAddress", emailAddressPattern, "Please enter a valid Email Address")
+        ValidateInput("contactNumber", phoneNumberPattern, "Please enter a Valid Phone Number")
+    }
+
     function DisplayContacts() {
         console.log("Contact Us Page")
+
+        ContactFormValidate()
 
         let submitButton = document.getElementById("submitButton")
         let subscribeCheckbox = document.getElementById("subscribeCheckbox")
@@ -94,6 +145,7 @@
     }
 
     function DisplayEditPage() {
+        ContactFormValidate()
         let page = location.hash.substring(1)
 
         switch(page) {
@@ -155,12 +207,14 @@
         switch (document.title) {
             case "Home - WEBD6201 Demo":
                 DisplayHome()
+                DisplayNavBar()
                 break
             case "Projects - WEBD6201 Demo":
                 DisplayProjects()
                 break
             case "Contact Us - WEBD6201 Demo":
                 DisplayContacts()
+                DisplayNavBar()
                 break
             case "Contact List - WEBD6201 Demo":
                 DisplayContactList()
@@ -172,6 +226,8 @@
                 DisplayEditPage()
                 break
         }
+        
+
     }
 
     window.addEventListener("load", Start)
