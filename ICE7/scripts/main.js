@@ -69,9 +69,9 @@
         let phoneNumberPattern = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/g
         let fullNamePattern = /^([A-Z][a-z]{1,25})((\s|,|-)([A-Z][a-z]{1,25}))*(\s|-|,)*([A-Z][a-z]{1,25})*$/g
 
-        ValidateInput("fullName", fullNamePattern, "Please enter a valid Full name which means a capitalized first name and capitalized last name")
-        ValidateInput("emailAddress", emailAddressPattern, "Please enter a valid Email Address")
-        ValidateInput("contactNumber", phoneNumberPattern, "Please enter a Valid Phone Number")
+        ValidateInput("fullName", fullNamePattern, "Please Enter a Valid First Name (First Letter MUST BE Capitalized1)")
+        ValidateInput("emailAddress", emailAddressPattern, "Please Enter a Valid Email Address")
+        ValidateInput("contactNumber", phoneNumberPattern, "Please Enter a Valid Phone Number")
     }
 
     function DisplayContacts() {
